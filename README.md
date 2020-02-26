@@ -14,8 +14,16 @@ status](https://www.r-pkg.org/badges/version/dfuzz)](https://CRAN.R-project.org/
 The goal of **{dfuzz}** is to help you cleaning up a messy column of
 strings of characters in your `tibble` or `data.frame`.
 
-This package is **highly experimental** and far from being OK at the
-moment.
+This package is **highly experimental** and is not yet ready for being
+used for real applications.
+
+It is build around a single dependency:
+[**{stringdist}**](https://github.com/markvanderloo/stringdist), and it
+is possible to use the full power of the function `stringdist()` from
+this excellent package.
+
+**{dfuzz}** aims at being compatible with both *tidyverse* and *base* R
+dialects.
 
 ## Installation
 
@@ -78,12 +86,12 @@ clean_df2
 
 ## fast and dirty workflow with {tidyverse}:
 library(tidyverse)
-#> ── Attaching packages ────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ───────────────────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.2.1            ✓ purrr   0.3.3       
 #> ✓ tibble  2.99.99.9014     ✓ dplyr   0.8.99.9000 
 #> ✓ tidyr   1.0.2            ✓ stringr 1.4.0       
 #> ✓ readr   1.3.1            ✓ forcats 0.4.0
-#> ── Conflicts ───────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ──────────────────────────────────── tidyverse_conflicts() ──
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 test_df %>%
