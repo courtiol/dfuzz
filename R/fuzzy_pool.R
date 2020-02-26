@@ -42,9 +42,12 @@ fuzzy_pool <- function(string_vec, threshold = options("fuzzy_threshold")[[1]], 
     string_vec <- as.character(string_vec)
   }
 
+  ## unNA:
+  string_vec <- string_vec[!is.na(string_vec)]
+
   ## special case when nothing is messy for sure:
   if (length(string_vec) < 2 | length(unique(string_vec)) < 2) {
-    return(list(messy = character(0), ok = unique(string_vec)))
+    return(list(messy = list(), ok = unique(string_vec)))
   }
 
   ## comparisons of different strings (non duplicated):
@@ -55,14 +58,18 @@ fuzzy_pool <- function(string_vec, threshold = options("fuzzy_threshold")[[1]], 
 
   ## keep only strings for which distance is below threshold and discard the column with the distances:
   string_messy <- string_compared[string_compared$dist < threshold, 1:2]
+  list_messy_temp <- split(string_messy, string_messy[[1]])
+  list_messy <- lapply(list_messy_temp, function(x) unique(unlist(x)))
+  names(list_messy) <- NULL
+
+  ## merge groups containing same strings:
+  list_messy_short <- merge_common_list(list_messy)
 
   ## determine OK strings as those not messy:
-  string_ok <- setdiff(string_vec, unique(unname(unlist(string_messy))))
+  string_ok <- setdiff(string_vec, unique(unname(unlist(list_messy_short))))
 
   ## turn the data frame created into a clean list:
-  list_messy <- split(string_messy, string_messy[[1]])
-  out <- list(messy = lapply(list_messy, function(x) unique(unlist(x))),
-              ok = string_ok)
+  out <- list(messy = list_messy_short, ok = string_ok)
 
   ## return:
   out
