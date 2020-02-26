@@ -1,0 +1,89 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# dfuzz
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/dfuzz)](https://CRAN.R-project.org/package=dfuzz)
+<!-- badges: end -->
+
+The goal of __{dfuzz}__ is to help you cleaning up a messy column of strings
+of characters in your `tibble` or `data.frame`.
+
+This package is __highly experimental__ and far from being OK at the moment.
+
+## Installation
+
+You can install this package using __{remotes}__ (or __{devtools}__):
+
+```r
+remotes::install_github("courtiol/dfuzz")
+```
+
+## Example
+
+```{r example}
+library(dfuzz)
+
+## a toy example:
+test_df <- data.frame(fruit = c("banana", "blueberry", "limon", "pinapple",
+                                "aple", "apple", "ApplE", "bonana"))
+test_df
+
+## fast and dirty workflow:
+clean_df1 <- fuzzy_tidy(test_df, fruit)
+clean_df1
+
+## more subtle workflow:
+template_fruit <- fuzzy_match(test_df, fruit)
+template_fruit
+template_fruit$selected[1] <- "apple"
+clean_df2 <- fuzzy_tidy(test_df, fruit, template_fruit)
+clean_df2
+
+## fast and dirty workflow with {tidyverse}:
+library(tidyverse)
+test_df %>%
+  fuzzy_tidy(fruit) %>%
+  mutate(fruit = fruit.tidy) %>%
+  select(-contains("fruit."))
+
+## more subtle workflow with {tidyverse}:
+test_df %>%
+  mutate(fruit = str_to_title(fruit)) %>%
+  fuzzy_match(fruit) -> template_fruit
+template_fruit
+
+template_fruit %>%
+  mutate(selected = fct_recode(selected, Apple = "Aple")) -> better_template_fruit
+
+better_template_fruit
+
+test_df %>%
+  mutate(fruit = str_to_title(fruit)) %>%
+  fuzzy_tidy(fruit, better_template_fruit) -> clean_df3
+clean_df3
+
+clean_df3 %>%
+  mutate(fruit = fruit.tidy) %>%
+  select(-contains("fruit."))
+```
+
+## Help \& feedbacks wanted!
+
+If you find that this package is an idea worth pursuing, please let me know.
+Developing is always more fun when it becomes a collaborative work.
+So please also email me (or leave an issue) if you want to get involved!
