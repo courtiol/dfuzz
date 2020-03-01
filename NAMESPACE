@@ -3,4 +3,6 @@
 export(fuzzy_match)
 export(fuzzy_pool)
 export(fuzzy_tidy)
+export(get_col)
+export(get_colname)
 export(merge_common_list)

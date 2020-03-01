@@ -19,3 +19,58 @@ merge_common_list <- function(list) {
     unique(unlist(list[sapply(list, function(y) any(x %in% y))]))
   }, simplify = FALSE))
 }
+
+
+#' Extract column name from dataset
+#'
+#' This function extracts a column name from a dataset irrespective of whether the
+#' column is called by its quoted name, its non quotted name, or through an
+#' object.
+#'
+#' @param .data A `data.frame` or `tbl`
+#' @param col A column name
+#'
+#' @seealso [`get_col()`]
+#'
+#' @export
+#'
+#' @examples
+#' get_colname(iris, "Sepal.Length")
+#' get_colname(iris, Sepal.Length)
+#' get_colname(iris, 1)
+#'
+get_colname <- function(.data, col) {
+  cols <- rlang::set_names(seq_along(names(.data)), names(.data))
+  col  <- rlang::eval_tidy(rlang::enquo(col), cols)
+  if (is.numeric(col)) col <- names(cols)[col]
+  col
+}
+
+
+#' Extract column from dataset
+#'
+#' This function extracts the column of a dataset irrespective of whether the
+#' column is called by its quoted name, its non quotted name, or through an
+#' object.
+#'
+#' This function allow for writing code as if everything was relying on
+#' non-standard evaluation (i.e. in the tidyverse style).
+#' It is inspired from [`pull()`][`dplyr::pull`]
+#'
+#' @inheritParams get_colname
+#'
+#' @seealso [`get_colname()`]
+#'
+#' @export
+#'
+#' @examples
+#' get_col(iris, "Sepal.Length")
+#' get_col(iris, Sepal.Length)
+#'
+get_col <- function(.data, col) {
+  col <- get_colname(.data, {{col}})
+  .data[[col]]
+}
+
+
+

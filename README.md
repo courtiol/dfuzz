@@ -17,10 +17,14 @@ strings of characters in your `tibble` or `data.frame`.
 This package is **highly experimental** and is not yet ready for being
 used for real applications.
 
-It is build around a single dependency:
-[**{stringdist}**](https://github.com/markvanderloo/stringdist), and it
-is possible to use the full power of the function `stringdist()` from
-this excellent package.
+It is build around two dependencies which themselves have no
+dependencies:
+
+  - [**{rlang}**](https://github.com/r-lib/rlang)
+
+  - [**{stringdist}**](https://github.com/markvanderloo/stringdist), and
+    it is possible to use the full power of the function `stringdist()`
+    from this excellent package.
 
 **{dfuzz}** aims at being compatible with both *tidyverse* and *base* R
 dialects.
@@ -56,14 +60,14 @@ test_df
 clean_df1 <- fuzzy_tidy(test_df, fruit)
 clean_df1
 #>       fruit fruit.clean fruit.cleaned fruit.tidy
-#> 1    banana        <NA>        banana     banana
-#> 2 blueberry   blueberry          <NA>  blueberry
-#> 3     limon       limon          <NA>      limon
-#> 4  pinapple    pinapple          <NA>   pinapple
-#> 5      aple        <NA>          aple       aple
-#> 6     apple        <NA>          aple       aple
-#> 7     ApplE       ApplE          <NA>      ApplE
-#> 8    bonana        <NA>        banana     banana
+#> 1    banana          NA        banana     banana
+#> 2 blueberry           5          <NA>          5
+#> 3     limon           7          <NA>          7
+#> 4  pinapple           8          <NA>          8
+#> 5      aple          NA          aple       aple
+#> 6     apple          NA          aple       aple
+#> 7     ApplE           3          <NA>          3
+#> 8    bonana          NA        banana     banana
 
 ## more subtle workflow:
 template_fruit <- fuzzy_match(test_df, fruit)
@@ -75,23 +79,23 @@ template_fruit$selected[1] <- "apple"
 clean_df2 <- fuzzy_tidy(test_df, fruit, template_fruit)
 clean_df2
 #>       fruit fruit.clean fruit.cleaned fruit.tidy
-#> 1    banana        <NA>        banana     banana
-#> 2 blueberry   blueberry          <NA>  blueberry
-#> 3     limon       limon          <NA>      limon
-#> 4  pinapple    pinapple          <NA>   pinapple
-#> 5      aple        <NA>         apple      apple
-#> 6     apple        <NA>         apple      apple
-#> 7     ApplE       ApplE          <NA>      ApplE
-#> 8    bonana        <NA>        banana     banana
+#> 1    banana          NA        banana     banana
+#> 2 blueberry           5          <NA>          5
+#> 3     limon           7          <NA>          7
+#> 4  pinapple           8          <NA>          8
+#> 5      aple          NA         apple      apple
+#> 6     apple          NA         apple      apple
+#> 7     ApplE           3          <NA>          3
+#> 8    bonana          NA        banana     banana
 
 ## fast and dirty workflow with {tidyverse}:
 library(tidyverse)
-#> ── Attaching packages ───────────────────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ──────────────────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.2.1            ✓ purrr   0.3.3       
 #> ✓ tibble  2.99.99.9014     ✓ dplyr   0.8.99.9000 
 #> ✓ tidyr   1.0.2            ✓ stringr 1.4.0       
 #> ✓ readr   1.3.1            ✓ forcats 0.4.0
-#> ── Conflicts ──────────────────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ─────────────────────────────────── tidyverse_conflicts() ──
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 test_df %>%
@@ -99,15 +103,15 @@ test_df %>%
   mutate(fruit = fruit.tidy) %>%
   select(-contains("fruit."))
 #> # A tibble: 8 x 1
-#>   fruit    
-#>   <chr>    
-#> 1 banana   
-#> 2 blueberry
-#> 3 limon    
-#> 4 pinapple 
-#> 5 aple     
-#> 6 aple     
-#> 7 ApplE    
+#>   fruit 
+#>   <chr> 
+#> 1 banana
+#> 2 5     
+#> 3 7     
+#> 4 8     
+#> 5 aple  
+#> 6 aple  
+#> 7 3     
 #> 8 banana
 
 ## more subtle workflow with {tidyverse}:

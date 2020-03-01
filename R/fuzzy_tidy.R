@@ -42,20 +42,18 @@
 #'
 fuzzy_tidy <- function(.data, stringvar, template = NULL, threshold = options("fuzzy_threshold")[[1]], ...) {
 
-  ## extract column name:
-  name_var <- as.character(substitute(stringvar))
+  ## retrieve the column name:
+  name_var <- get_colname(.data, {{stringvar}})
 
   ## retrieve the column as a vector:
-  if (is.character(substitute(stringvar))) stringvar <- as.symbol(stringvar)
-  stringvar <- substitute(stringvar)
-  string_vec <- as.character(eval(stringvar, .data, parent.frame()))
+  string_vec <- get_col(.data, {{stringvar}})
 
   ## compute the fuzzy matches:
   list_pools <- fuzzy_pool(string_vec, threshold, ...)
 
   ## build lookup table if missing:
   if (is.null(template)) {
-    template <- fuzzy_match(.data, stringvar, threshold, .listpool = list_pools, ...)
+    template <- fuzzy_match(.data, {{stringvar}}, threshold, .listpool = list_pools, ...)
   }
 
   ## convert to character if needed:

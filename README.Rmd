@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -25,7 +27,12 @@ of characters in your `tibble` or `data.frame`.
 
 This package is __highly experimental__ and is not yet ready for being used for real applications.
 
-It is build around a single dependency: [__{stringdist}__](https://github.com/markvanderloo/stringdist), and it is possible to use the full power of the function `stringdist()` from this excellent package.
+It is build around two dependencies which themselves have no dependencies:
+
+- [__{rlang}__](https://github.com/r-lib/rlang)
+
+- [__{stringdist}__](https://github.com/markvanderloo/stringdist), and it is possible to use the full power of the function `stringdist()` from this excellent package.
+
 
 __{dfuzz}__ aims at being compatible with both _tidyverse_ and _base_ R dialects.
 

@@ -18,9 +18,7 @@
 fuzzy_match <- function(.data, stringvar, threshold = options("fuzzy_threshold")[[1]], .listpool = NULL, ...) {
 
   ## retrieve the column as a vector:
-  if (is.character(substitute(stringvar))) stringvar <- as.symbol(stringvar)
-  stringvar <- substitute(stringvar)
-  string_vec <- as.character(eval(stringvar, .data, parent.frame()))
+  string_vec <- get_col(.data, {{stringvar}})
 
   ## compute the fuzzy matches::
   if (is.null(.listpool)) {
