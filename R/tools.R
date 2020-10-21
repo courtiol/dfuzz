@@ -72,5 +72,3 @@ get_col <- function(.data, col) {
   .data[[col]]
 }
 
-
-
