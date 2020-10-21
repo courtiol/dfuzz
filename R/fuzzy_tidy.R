@@ -14,14 +14,14 @@
 #' cleaning, and thus the proposition as replacement for your original column
 #'
 #' If the tidying does not satisfy you, think of adjusting the argument
-#' `threshold` either direclty when calling the function or by
+#' `threshold` either directly when calling the function or by
 #' setting a general option for the package using
 #' `options("threshold" = X)` with X the number of your choice. You
-#' can also improve the tidying by providing fine-tunning argument to the
+#' can also improve the tidying by providing fine-tuning argument to the
 #' underlying workhorse [`stringdist()`][`stringdist::stringdist`] using the ...
 #' argument.
 #'
-#' You can usea template created with `fuzzy_match`() to control how the messy strings
+#' You can use a template created with `fuzzy_match`() to control how the messy strings
 #' are being tidy.
 #'
 #' @inheritParams fuzzy_match
